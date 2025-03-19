@@ -1,0 +1,5 @@
+# Ignorar carpetas y archivos en git
+node_modules/
+dist/
+.env
+.vscode/
