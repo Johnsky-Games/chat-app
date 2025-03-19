@@ -4,14 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <title>Chat App</title>
 </head>
 <!-- Crearemos la app con html semántico -->
 
 <body>
-    <h2>Hola mundo</h2>
+    <div id="chat-container">
+        <div id="user-list">
+            <h3>Usuarios Conectados</h3>
+            <ul id="users"></ul>
+        </div>
+
+
+        <div id="chat-box">
+            <div id="messages"></div>
+            <form action="" id="message-form">
+                <input type="text" name="" id="message-input" placeholder="Escribe un mensaje..." autocomplete="off"
+                    required>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
     <!-- Importamos el script que hemos creado -->
+    <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
 </body>
 
