@@ -1,349 +1,431 @@
 /* Variables de colores y tipografías */
 :root {
-    --primary-color: #3a57e8;
-    --secondary-color: #f50057;
-    --background-color: #f7f7f7;
-    --container-bg: #ffffff;
-    --list-bg: #f1f3f5;
-    --message-bg: #eef2f7;
-    --message-bg-for-each: #ffffff;
-    --text-color: #333333;
-    --border-color: #d1d9e0;
-    --hover-bg: #e2e6ea;
-    --focus-color: #2b3dc4;
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  
-    /* Estados de conexión */
-    --status-online: #4caf50;
-    --status-offline: #f44336;
-    --status-busy: #ff9800;
+  --primary-color: #3a57e8;
+  --secondary-color: #f50057;
+  --background-color: #f7f7f7;
+  --container-bg: #ffffff;
+  --list-bg: #f1f3f5;
+  --message-bg: #eef2f7;
+  --message-bg-for-each: #ffffff;
+  --text-color: #333333;
+  --border-color: #d1d9e0;
+  --hover-bg: #e2e6ea;
+  --focus-color: #2b3dc4;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --status-online: #4caf50;
+  --status-offline: #f44336;
+  --status-busy: #ff9800;
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilo global para el body */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 10px;
+}
+
+/* Contenedor principal del chat */
+#chat-container {
+  width: 90%;
+  max-width: 1200px;
+  height: 90vh;
+  background-color: var(--container-bg);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  display: flex;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#chat-container:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Lista de usuarios */
+#user-list {
+  width: 30%;
+  min-width: 200px;
+  background-color: var(--list-bg);
+  border-right: 1px solid var(--border-color);
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+#user-list:hover {
+  background-color: #e9ecef;
+}
+
+#user-list h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+#user-list ul {
+  list-style: none;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Elementos de la lista de usuarios */
+#users li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 8px;
+  background-color: var(--list-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+#users li:hover {
+  background-color: var(--hover-bg);
+  transform: scale(1.02);
+}
+
+#users li .status {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+#users li .username {
+  flex: 1;
+}
+
+/* Área de chat */
+#chat-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Indicador, selector y botón de conexión/desconexión */
+#status-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 3;
+}
+
+#connection-status {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--status-offline);
+}
+
+#status-text {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+#status-select {
+  margin-left: 10px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--container-bg);
+  font-size: 0.9rem;
+}
+
+/* Botón de conexión/desconexión */
+#toggle-connection-btn {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+#toggle-connection-btn:hover {
+  background-color: #d0004d;
+}
+
+/* Contenedor de mensajes */
+#messages {
+  flex: 1;
+  padding: 20px;
+  background-color: var(--message-bg);
+  margin: 20px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  overflow-y: auto;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Globos de mensaje base */
+.message {
+  position: relative;
+  padding: 12px 18px;
+  margin-bottom: 12px;
+  border-radius: 20px;
+  max-width: 80%;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Hover sobre mensaje */
+.message:hover {
+  background-color: #f0f4f8;
+  transform: translateY(-2px);
+}
+
+/* Cola del mensaje (apunta a la izquierda para recibidos) */
+.message.message-received::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 20px;
+  border-width: 8px 8px 0 0;
+  border-style: solid;
+  border-color: var(--message-bg-for-each) transparent transparent transparent;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08));
+}
+
+/* Cola del mensaje (apunta a la derecha para enviados) */
+.message.message-sent::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  right: 20px;
+  border-width: 8px 0 0 8px;
+  border-style: solid;
+  border-color: var(--message-bg-for-each) transparent transparent transparent;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08));
+}
+
+/* Mensajes enviados (alineación a la derecha) */
+.message.message-sent {
+  margin-left: auto;
+  background-color: #dcf8c6;
+}
+
+/* Mensajes recibidos (alineación a la izquierda) */
+.message.message-received {
+  align-self: flex-start;
+  background-color: #fff;
+}
+
+/* Timestamp en mensajes */
+.timestamp {
+  font-size: 0.8rem;
+  color: #999;
+  margin-left: 8px;
+}
+
+/* Mensajes del sistema (centrados y en cursiva) */
+.system-message {
+  text-align: center;
+  font-style: italic;
+  color: #555;
+  margin: 8px 0;
+}
+
+/* Formulario de ingreso (modal overlay) */
+#username-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  transition: opacity 0.3s ease;
+}
+
+#username-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+#username-form textarea:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 5px rgba(58, 87, 232, 0.5);
+}
+
+#username-form button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#username-form button:hover {
+  background-color: var(--focus-color);
+}
+
+/* Formulario para enviar mensaje */
+#message-form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 15px 20px;
+  background-color: #fafafa;
+  border-top: 1px solid var(--border-color);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  gap: 10px;
+}
+
+#message-input {
+  flex: 1;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  resize: none;
+  outline: none;
+  height: 40px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#message-input:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 5px rgba(58, 87, 232, 0.5);
+}
+
+button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  font-size: 1rem;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 40px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--focus-color);
+  transform: translateY(-2px);
+}
+
+/* Tooltip de error */
+#error-message {
+  position: absolute;
+  top: -55px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #e57373;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+#error-message::before {
+  content: "⚠️ ";
+  font-size: 1rem;
+  margin-right: 4px;
+}
+
+#error-message.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+#error-message::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #ffebee transparent transparent transparent;
+}
+
+/* Scrollbar personalizada para mensajes */
+#messages::-webkit-scrollbar {
+  width: 10px;
+}
+
+#messages::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+#messages::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  #chat-container {
+    flex-direction: column;
+    height: 95vh;
   }
-  
-  /* Reset básico */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  #user-list {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
-  
-  /* Estilo global para el body */
-  body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--background-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+  #chat-box {
+    width: 100%;
+    height: calc(100% - 200px);
     padding: 10px;
   }
-  
-  /* Contenedor principal del chat */
-  #chat-container {
-    width: 100%;
-    max-width: 1200px;
-    height: 90vh;
-    background-color: var(--container-bg);
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-    display: flex;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  #chat-container:hover {
-    transform: scale(1.01);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Lista de usuarios */
-  #user-list {
-    width: 30%;
-    min-width: 200px;
-    background-color: var(--list-bg);
-    border-right: 1px solid var(--border-color);
-    padding: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    transition: background-color 0.2s ease;
-  }
-  
-  #user-list:hover {
-    background-color: #e9ecef;
-  }
-  
-  #user-list h3 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
-    color: var(--primary-color);
-    text-align: center;
-  }
-  
-  #user-list ul {
-    list-style: none;
-    flex: 1;
-    overflow-y: auto;
-  }
-  
-  /* Estilos para cada usuario con estado */
-  #user-list li {
-    padding: 10px 15px;
-    margin-bottom: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column-reverse;
-  }
-  
-  #user-list li:last-child {
-    margin-bottom: 0;
-  }
-  
-  #user-list li:hover {
-    background-color: var(--hover-bg);
-    transform: translateX(5px);
-  }
-  
-  /* Estado activo de usuario (seleccionado) */
-  #user-list li.active {
-    background-color: var(--primary-color);
-    color: #fff;
-  }
-  
-  /* Indicadores de estado */
-  .status {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-left: 10px;
-    flex-shrink: 0;
-  }
-  
-  .online {
-    background-color: var(--status-online);
-  }
-  .offline {
-    background-color: var(--status-offline);
-  }
-  .busy {
-    background-color: var(--status-busy);
-  }
-  
-  /* Área de chat */
-  #chat-box {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    min-height: 0; /* Muy importante para el overflow en flex */
-  }
-  
-  /* Sección de mensajes */
   #messages {
-    flex: 1;
-    min-height: 0; /* Permite que el contenedor se reduzca y se active el scroll */
-    overflow-y: auto;
-    padding: 20px;
-    background-color: var(--message-bg);
-    margin: 20px;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; /* Alinea los mensajes hacia abajo */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin: 10px;
+    max-height: 60vh;
   }
-  
-  /* Sección mensaje */
-  .message {
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    border-radius: 15px;
-    max-width: 70%;
-    align-self: flex-start;
-    background-color: var(--message-bg-for-each);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    position: relative;
-    overflow-wrap: break-word;
-    white-space: pre-wrap;
-  }
-  
-  .message:hover {
-    background-color: #f0f4f8;
-    transform: translateY(-2px);
-  }
-  
-  /* Pseudoelemento para la "cola" del globo de diálogo */
-  .message::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    left: 20px;
-    border-width: 10px 10px 0 0;
-    border-style: solid;
-    border-color: var(--message-bg) transparent transparent transparent;
-    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
-  }
-  
-  /* Formulario para enviar mensaje */
-  #message-form {
-    display: flex;
-    padding: 15px 20px;
-    background-color: #fafafa;
-    border-top: 1px solid var(--border-color);
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    align-items: center;
-    transition: background-color 0.2s ease;
-    position: relative;
-  }
-  
-  #message-form:hover {
-    background-color: #f5f5f5;
-  }
-  
-  #message-input {
-    flex: 1;
-    padding: 10px 15px;
-    font-size: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    resize: none;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    overflow-wrap: break-word;
-    white-space: pre-wrap;
-    height: 40px; /* Altura fija para igualar al botón */
-  }
-  
-  #message-input:focus {
-    border-color: var(--focus-color);
-    box-shadow: 0 0 5px rgba(58, 87, 232, 0.5);
-  }
-  
-  button {
-    padding: 10px 20px;
-    margin-left: 10px;
-    font-size: 1rem;
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    height: 40px; /* Altura fija para igualar */
-  }
-  
-  button:hover {
-    background-color: var(--focus-color);
-    transform: translateY(-2px);
-  }
-  
-  /* Efectos de animación para la aparición de mensajes */
-  .message {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeInUp 0.3s forwards;
-  }
-  
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Estilos para la alerta de error (tooltip) con diseño llamativo y amigable */
-  #error-message {
-    position: absolute;
-    top: -55px; /* Ajusta la distancia vertical respecto al formulario */
-    left: 50%;
-    transform: translateX(-50%) translateY(-10px);
-    background-color: #ffebee; /* Fondo rojo muy suave */
-    color: #c62828; /* Texto en rojo intenso */
-    border: 1px solid #e57373; /* Borde en tono moderado */
-    border-radius: 8px; /* Bordes redondeados */
-    padding: 8px 12px;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-  }
-  
-  /* Icono de advertencia agregado antes del mensaje */
-  #error-message::before {
-    content: "⚠️ ";
-    font-size: 1rem;
-    margin-right: 4px;
-  }
-  
-  /* Clase para mostrar el tooltip */
-  #error-message.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  
-  /* Flecha del tooltip */
-  #error-message::after {
-    content: "";
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 8px;
-    border-style: solid;
-    border-color: #ffebee transparent transparent transparent;
-  }
-  
-  /* Media queries para responsividad */
-  @media (max-width: 768px) {
-    #chat-container {
-      flex-direction: column;
-      height: 95vh;
-    }
-  
-    #user-list {
-      width: 100%;
-      border-right: none;
-      border-bottom: 1px solid var(--border-color);
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-    }
-  
-    #chat-box {
-      width: 100%;
-      height: calc(100% - 200px);
-      padding: 10px;
-    }
-  
-    #messages {
-      margin: 10px;
-    }
-  }
-  
-  /* Barra de scroll personalizada para los mensajes */
-  #messages::-webkit-scrollbar {
-    width: 10px;
-  }
-  
-  #messages::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
-  
-  #messages::-webkit-scrollbar-thumb {
-    background-color: #c1c1c1;
-    border-radius: 10px;
-    border: 2px solid #f1f1f1;
-  }
-  
+}

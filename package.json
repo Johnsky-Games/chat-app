@@ -8,9 +8,9 @@
   },
   "type": "module",
   "keywords": [],
-  "author": "",
+  "author": "Jonathan Boada",
   "license": "ISC",
-  "description": "",
+  "description": "Aplicación de chat en tiempo real, con Node.js, Express y Socket.io",
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
