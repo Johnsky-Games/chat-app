@@ -2,9 +2,9 @@
 import express from "express"; // Importa express
 import http from "http"; // Importa http
 import cors from "cors"; // Importa cors
-import { Server } from "socket.io"; // Importa socket.io
 import path from "path"; // Importa path
 import { fileURLToPath } from "url"; // Importa fileURLToPath
+import { Server as socketIo } from "socket.io"; // Importa socket.io
 
 // Configuración de servidor express
 const app = express();
@@ -16,7 +16,12 @@ app.use(cors());
 const server = http.createServer(app);
 
 // Configuración de servidor de socket
-const io = new Server(server);
+const io = new socketIo(server, {
+    cors: {
+        origin: "http://127.0.0.1:5500", // O el puerto que se esté utilizando para el cliente web (por ejemplo, 5500) 
+        methods: ["GET", "POST"]
+    }
+});
 
 // Puerto de servidor
 const PORT = process.env.PORT || 3000;
@@ -28,15 +33,20 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "public")));
 
 // Ruta básica para la página principal	
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
     res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 // Escucha los eventos de conexión de los clientes
-io.on("conection", (socket) => {
+io.on("connection", (socket) => {
     console.log("Nuevo usuario conectado");
 
-    // Maneja la coneción del cliente
+     // Escucha los eventos de mensaje del cliente
+     socket.on("message", (msg) => {
+        io.emit("chatMessage", msg); // Retransmite el mensaje a todos los clientes conectados
+    });
+
+    // Maneja la conexión del cliente
     socket.on("disconnect", () => {
         console.log("Usuario desconectado");
     });
